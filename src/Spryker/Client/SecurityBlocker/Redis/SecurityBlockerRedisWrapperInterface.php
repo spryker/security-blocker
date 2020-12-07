@@ -5,15 +5,17 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Spryker\Client\SecurityBlocker\Delegator;
+namespace Spryker\Client\SecurityBlocker\Redis;
 
 use Generated\Shared\Transfer\AuthContextTransfer;
 use Generated\Shared\Transfer\AuthResponseTransfer;
 
-interface SecurityBlockerStorageDelegatorInterface
+interface SecurityBlockerRedisWrapperInterface
 {
     /**
      * @param \Generated\Shared\Transfer\AuthContextTransfer $authContextTransfer
+     *
+     * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
      *
      * @return \Generated\Shared\Transfer\AuthResponseTransfer
      */
