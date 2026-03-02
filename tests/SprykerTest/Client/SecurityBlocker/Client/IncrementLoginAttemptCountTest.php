@@ -38,9 +38,6 @@ class IncrementLoginAttemptCountTest extends Unit
      */
     protected $redisClientMock;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -50,9 +47,6 @@ class IncrementLoginAttemptCountTest extends Unit
         $this->tester->setDependency(SecurityBlockerDependencyProvider::CLIENT_REDIS, $this->redisClientMock);
     }
 
-    /**
-     * @return void
-     */
     public function testIncrementLoginAttemptCountWillRequireType(): void
     {
         // Arrange
@@ -63,9 +57,6 @@ class IncrementLoginAttemptCountTest extends Unit
         $this->tester->getLocator()->securityBlocker()->client()->incrementLoginAttemptCount($securityCheckAuthContextTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testIncrementLoginAttemptCountWillSucceed(): void
     {
         // Arrange
@@ -106,9 +97,6 @@ class IncrementLoginAttemptCountTest extends Unit
         $this->assertFalse($actualSecurityCheckAuthResponseTransfer->getIsBlocked());
     }
 
-    /**
-     * @return void
-     */
     public function testIncrementLoginAttemptCountWillFailWithException(): void
     {
         // Arrange

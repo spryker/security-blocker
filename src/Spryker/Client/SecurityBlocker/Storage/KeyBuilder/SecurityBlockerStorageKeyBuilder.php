@@ -16,11 +16,6 @@ class SecurityBlockerStorageKeyBuilder implements SecurityBlockerStorageKeyBuild
      */
     protected const KEY_PART_SEPARATOR = ':';
 
-    /**
-     * @param \Generated\Shared\Transfer\SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer
-     *
-     * @return string
-     */
     public function getStorageKey(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): string
     {
         return $securityCheckAuthContextTransfer->getTypeOrFail()

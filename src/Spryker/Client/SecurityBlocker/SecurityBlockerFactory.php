@@ -25,9 +25,6 @@ use Spryker\Client\SecurityBlocker\Storage\Writer\SecurityBlockerStorageWriterIn
  */
 class SecurityBlockerFactory extends AbstractFactory
 {
-    /**
-     * @return \Spryker\Client\SecurityBlocker\Storage\Checker\SecurityBlockerStorageCheckerInterface
-     */
     public function createSecurityBlockerStorageChecker(): SecurityBlockerStorageCheckerInterface
     {
         return new SecurityBlockerStorageChecker(
@@ -37,9 +34,6 @@ class SecurityBlockerFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Spryker\Client\SecurityBlocker\Storage\Writer\SecurityBlockerStorageWriterInterface
-     */
     public function createSecurityBlockerStorageWriter(): SecurityBlockerStorageWriterInterface
     {
         return new SecurityBlockerStorageWriter(
@@ -49,17 +43,11 @@ class SecurityBlockerFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Spryker\Client\SecurityBlocker\Storage\KeyBuilder\SecurityBlockerStorageKeyBuilderInterface
-     */
     public function createSecurityBlockerStorageKeyBuilder(): SecurityBlockerStorageKeyBuilderInterface
     {
         return new SecurityBlockerStorageKeyBuilder();
     }
 
-    /**
-     * @return \Spryker\Client\SecurityBlocker\Redis\SecurityBlockerRedisWrapperInterface
-     */
     public function createSecurityBlockerRedisWrapper(): SecurityBlockerRedisWrapperInterface
     {
         return new SecurityBlockerRedisWrapper(
@@ -68,9 +56,6 @@ class SecurityBlockerFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Spryker\Client\SecurityBlocker\Resolver\ConfigurationResolverInterface
-     */
     public function createConfigurationResolver(): ConfigurationResolverInterface
     {
         return new ConfigurationResolver(
@@ -87,9 +72,6 @@ class SecurityBlockerFactory extends AbstractFactory
         return $this->getProvidedDependency(SecurityBlockerDependencyProvider::PLUGINS_SECURITY_BLOCKER_CONFIGURATION_SETTINGS_EXPANDER);
     }
 
-    /**
-     * @return \Spryker\Client\SecurityBlocker\Dependency\Client\SecurityBlockerToRedisClientInterface
-     */
     public function getRedisClient(): SecurityBlockerToRedisClientInterface
     {
         return $this->getProvidedDependency(SecurityBlockerDependencyProvider::CLIENT_REDIS);

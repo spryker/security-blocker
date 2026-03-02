@@ -32,11 +32,6 @@ class SecurityBlockerStorageWriter implements SecurityBlockerStorageWriterInterf
      */
     protected $configurationResolver;
 
-    /**
-     * @param \Spryker\Client\SecurityBlocker\Redis\SecurityBlockerRedisWrapperInterface $securityBlockerRedisWrapper
-     * @param \Spryker\Client\SecurityBlocker\Storage\KeyBuilder\SecurityBlockerStorageKeyBuilderInterface $securityBlockerStorageKeyBuilder
-     * @param \Spryker\Client\SecurityBlocker\Resolver\ConfigurationResolverInterface $configurationResolver
-     */
     public function __construct(
         SecurityBlockerRedisWrapperInterface $securityBlockerRedisWrapper,
         SecurityBlockerStorageKeyBuilderInterface $securityBlockerStorageKeyBuilder,

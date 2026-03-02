@@ -12,10 +12,5 @@ use Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer;
 
 interface SecurityBlockerStorageWriterInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer
-     *
-     * @return \Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer
-     */
     public function incrementLoginAttemptCount(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): SecurityCheckAuthResponseTransfer;
 }

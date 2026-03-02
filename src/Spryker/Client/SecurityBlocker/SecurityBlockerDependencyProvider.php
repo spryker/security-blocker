@@ -26,11 +26,6 @@ class SecurityBlockerDependencyProvider extends AbstractDependencyProvider
      */
     public const PLUGINS_SECURITY_BLOCKER_CONFIGURATION_SETTINGS_EXPANDER = 'PLUGINS_SECURITY_BLOCKER_CONFIGURATION_SETTINGS_EXPANDER';
 
-    /**
-     * @param \Spryker\Client\Kernel\Container $container
-     *
-     * @return \Spryker\Client\Kernel\Container
-     */
     public function provideServiceLayerDependencies(Container $container): Container
     {
         $container = parent::provideServiceLayerDependencies($container);
@@ -40,11 +35,6 @@ class SecurityBlockerDependencyProvider extends AbstractDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Client\Kernel\Container $container
-     *
-     * @return \Spryker\Client\Kernel\Container
-     */
     protected function addRedisClient(Container $container): Container
     {
         $container->set(static::CLIENT_REDIS, function (Container $container) {
@@ -56,11 +46,6 @@ class SecurityBlockerDependencyProvider extends AbstractDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Client\Kernel\Container $container
-     *
-     * @return \Spryker\Client\Kernel\Container
-     */
     protected function addSecurityBlockerConfigurationSettingsExpanderPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_SECURITY_BLOCKER_CONFIGURATION_SETTINGS_EXPANDER, function () {

@@ -37,9 +37,6 @@ class IsAccountBlockedTest extends Unit
      */
     protected $redisClientMock;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -49,9 +46,6 @@ class IsAccountBlockedTest extends Unit
         $this->tester->setDependency(SecurityBlockerDependencyProvider::CLIENT_REDIS, $this->redisClientMock);
     }
 
-    /**
-     * @return void
-     */
     public function testIsAccountBlockedWillRequireType(): void
     {
         // Arrange
@@ -63,9 +57,6 @@ class IsAccountBlockedTest extends Unit
             ->isAccountBlocked($securityCheckAuthContextTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testIsAccountBlockedWillSucceed(): void
     {
         // Arrange

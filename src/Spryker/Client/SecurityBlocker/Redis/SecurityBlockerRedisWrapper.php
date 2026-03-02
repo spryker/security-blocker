@@ -27,10 +27,6 @@ class SecurityBlockerRedisWrapper implements SecurityBlockerRedisWrapperInterfac
      */
     protected $securityBlockerConfig;
 
-    /**
-     * @param \Spryker\Client\SecurityBlocker\Dependency\Client\SecurityBlockerToRedisClientInterface $redisClient
-     * @param \Spryker\Client\SecurityBlocker\SecurityBlockerConfig $securityBlockerConfig
-     */
     public function __construct(
         SecurityBlockerToRedisClientInterface $redisClient,
         SecurityBlockerConfig $securityBlockerConfig
@@ -41,11 +37,6 @@ class SecurityBlockerRedisWrapper implements SecurityBlockerRedisWrapperInterfac
         $this->setupConnection();
     }
 
-    /**
-     * @param string $key
-     *
-     * @return string|null
-     */
     public function get(string $key): ?string
     {
         return $this->redisClient->get(
@@ -54,11 +45,6 @@ class SecurityBlockerRedisWrapper implements SecurityBlockerRedisWrapperInterfac
         );
     }
 
-    /**
-     * @param string $key
-     *
-     * @return int
-     */
     public function incr(string $key): int
     {
         return $this->redisClient->incr(
@@ -67,13 +53,6 @@ class SecurityBlockerRedisWrapper implements SecurityBlockerRedisWrapperInterfac
         );
     }
 
-    /**
-     * @param string $key
-     * @param int $seconds
-     * @param string $value
-     *
-     * @return bool
-     */
     public function setex(string $key, int $seconds, string $value): bool
     {
         return $this->redisClient->setex(
@@ -84,9 +63,6 @@ class SecurityBlockerRedisWrapper implements SecurityBlockerRedisWrapperInterfac
         );
     }
 
-    /**
-     * @return void
-     */
     protected function setupConnection(): void
     {
         $this->redisClient->setupConnection(
@@ -95,11 +71,6 @@ class SecurityBlockerRedisWrapper implements SecurityBlockerRedisWrapperInterfac
         );
     }
 
-    /**
-     * @param string $key
-     *
-     * @return string
-     */
     protected function getStorageKey(string $key = '*'): string
     {
         return static::KV_PREFIX . $key;

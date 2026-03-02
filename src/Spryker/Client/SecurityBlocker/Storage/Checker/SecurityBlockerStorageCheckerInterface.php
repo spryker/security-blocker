@@ -12,10 +12,5 @@ use Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer;
 
 interface SecurityBlockerStorageCheckerInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer
-     *
-     * @return \Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer
-     */
     public function isAccountBlocked(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): SecurityCheckAuthResponseTransfer;
 }

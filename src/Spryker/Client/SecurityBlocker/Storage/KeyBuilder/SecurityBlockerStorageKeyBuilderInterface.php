@@ -11,10 +11,5 @@ use Generated\Shared\Transfer\SecurityCheckAuthContextTransfer;
 
 interface SecurityBlockerStorageKeyBuilderInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer
-     *
-     * @return string
-     */
     public function getStorageKey(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): string;
 }

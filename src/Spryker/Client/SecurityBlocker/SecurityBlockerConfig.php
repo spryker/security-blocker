@@ -79,9 +79,6 @@ class SecurityBlockerConfig extends AbstractBundleConfig
         return $this->get(SecurityBlockerConstants::SECURITY_BLOCKER_REDIS_DATA_SOURCE_NAMES, []);
     }
 
-    /**
-     * @return \Generated\Shared\Transfer\RedisCredentialsTransfer
-     */
     protected function getConnectionCredentials(): RedisCredentialsTransfer
     {
         return (new RedisCredentialsTransfer())

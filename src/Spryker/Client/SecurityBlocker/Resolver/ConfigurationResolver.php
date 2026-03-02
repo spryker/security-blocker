@@ -34,11 +34,6 @@ class ConfigurationResolver implements ConfigurationResolverInterface
         $this->securityBlockerConfig = $securityBlockerConfig;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return \Generated\Shared\Transfer\SecurityBlockerConfigurationSettingsTransfer
-     */
     public function getSecurityBlockerConfigurationSettingsForType(string $type): SecurityBlockerConfigurationSettingsTransfer
     {
         $securityConfigurationSettingTransfers = $this->securityBlockerConfig->getSecurityBlockerConfigurationSettings();

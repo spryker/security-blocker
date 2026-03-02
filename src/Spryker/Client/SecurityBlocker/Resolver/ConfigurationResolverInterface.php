@@ -11,10 +11,5 @@ use Generated\Shared\Transfer\SecurityBlockerConfigurationSettingsTransfer;
 
 interface ConfigurationResolverInterface
 {
-    /**
-     * @param string $type
-     *
-     * @return \Generated\Shared\Transfer\SecurityBlockerConfigurationSettingsTransfer
-     */
     public function getSecurityBlockerConfigurationSettingsForType(string $type): SecurityBlockerConfigurationSettingsTransfer;
 }
