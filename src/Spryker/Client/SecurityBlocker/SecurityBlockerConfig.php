@@ -85,6 +85,7 @@ class SecurityBlockerConfig extends AbstractBundleConfig
             ->setScheme($this->getZedSessionScheme())
             ->setHost($this->get(SecurityBlockerConstants::SECURITY_BLOCKER_REDIS_HOST))
             ->setPort($this->get(SecurityBlockerConstants::SECURITY_BLOCKER_REDIS_PORT))
+            ->setUsername($this->get(SecurityBlockerConstants::SECURITY_BLOCKER_REDIS_USER, false))
             ->setDatabase($this->get(SecurityBlockerConstants::SECURITY_BLOCKER_REDIS_DATABASE))
             ->setPassword($this->get(SecurityBlockerConstants::SECURITY_BLOCKER_REDIS_PASSWORD, false))
             ->setIsPersistent($this->get(SecurityBlockerConstants::SECURITY_BLOCKER_REDIS_PERSISTENT_CONNECTION, false));

@@ -76,6 +76,14 @@ interface SecurityBlockerConstants
 
     /**
      * Specification:
+     * - Defines a username for Redis ACL authentication when used as security blocker storage.
+     *
+     * @api
+     */
+    public const string SECURITY_BLOCKER_REDIS_USER = 'SECURITY_BLOCKER_REDIS:SECURITY_BLOCKER_REDIS_USER';
+
+    /**
+     * Specification:
      * - Specifies an array of DSN strings for a multi-instance cluster/replication Redis setup.
      *
      * @api
