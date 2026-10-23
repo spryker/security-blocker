@@ -7,10 +7,14 @@
 
 namespace Spryker\Client\SecurityBlocker\Storage\Writer;
 
+use Generated\Shared\Transfer\SecurityCheckAttemptContextTransfer;
+use Generated\Shared\Transfer\SecurityCheckAttemptResponseTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthContextTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer;
 
 interface SecurityBlockerStorageWriterInterface
 {
     public function incrementLoginAttemptCount(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): SecurityCheckAuthResponseTransfer;
+
+    public function incrementAttemptCount(SecurityCheckAttemptContextTransfer $securityCheckAttemptContextTransfer): SecurityCheckAttemptResponseTransfer;
 }

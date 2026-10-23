@@ -17,5 +17,9 @@ interface SecurityBlockerToRedisClientInterface
 
     public function setex(string $connectionKey, string $key, int $seconds, string $value): bool;
 
+    public function ttl(string $connectionKey, string $key): int;
+
+    public function expire(string $connectionKey, string $key, int $seconds): bool;
+
     public function setupConnection(string $connectionKey, RedisConfigurationTransfer $configurationTransfer): void;
 }

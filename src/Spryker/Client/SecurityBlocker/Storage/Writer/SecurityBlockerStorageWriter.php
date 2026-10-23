@@ -8,6 +8,8 @@
 namespace Spryker\Client\SecurityBlocker\Storage\Writer;
 
 use Generated\Shared\Transfer\SecurityBlockerConfigurationSettingsTransfer;
+use Generated\Shared\Transfer\SecurityCheckAttemptContextTransfer;
+use Generated\Shared\Transfer\SecurityCheckAttemptResponseTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthContextTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer;
 use Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException;
@@ -17,6 +19,10 @@ use Spryker\Client\SecurityBlocker\Storage\KeyBuilder\SecurityBlockerStorageKeyB
 
 class SecurityBlockerStorageWriter implements SecurityBlockerStorageWriterInterface
 {
+    protected const int TTL_NO_EXPIRATION = -1;
+
+    protected const int MIN_ATTEMPT_TTL_SECONDS = 60;
+
     /**
      * @var \Spryker\Client\SecurityBlocker\Redis\SecurityBlockerRedisWrapperInterface
      */
@@ -43,11 +49,7 @@ class SecurityBlockerStorageWriter implements SecurityBlockerStorageWriterInterf
     }
 
     /**
-     * @param \Generated\Shared\Transfer\SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer
-     *
      * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
-     *
-     * @return \Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer
      */
     public function incrementLoginAttemptCount(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): SecurityCheckAuthResponseTransfer
     {
@@ -70,12 +72,43 @@ class SecurityBlockerStorageWriter implements SecurityBlockerStorageWriterInterf
     }
 
     /**
-     * @param string $storageKey
-     * @param \Generated\Shared\Transfer\SecurityBlockerConfigurationSettingsTransfer $securityBlockerConfigurationSettingsTransfer
-     *
      * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
-     *
-     * @return int
+     */
+    public function incrementAttemptCount(SecurityCheckAttemptContextTransfer $securityCheckAttemptContextTransfer): SecurityCheckAttemptResponseTransfer
+    {
+        $key = $this->securityBlockerStorageKeyBuilder->getAttemptStorageKey($securityCheckAttemptContextTransfer);
+        $numberOfAttempts = $this->securityBlockerRedisWrapper->incr($key);
+
+        if (!$numberOfAttempts) {
+            throw new SecurityBlockerException(
+                sprintf('Could not increment redisKey: "%s"', $key),
+            );
+        }
+
+        $this->setAttemptTtl($key, $securityCheckAttemptContextTransfer->getTtlOrFail());
+
+        return (new SecurityCheckAttemptResponseTransfer())
+            ->setNumberOfAttempts($numberOfAttempts);
+    }
+
+    /**
+     * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
+     */
+    protected function setAttemptTtl(string $key, int $ttl): void
+    {
+        if ($this->securityBlockerRedisWrapper->ttl($key) !== static::TTL_NO_EXPIRATION) {
+            return;
+        }
+
+        if (!$this->securityBlockerRedisWrapper->expire($key, max($ttl, static::MIN_ATTEMPT_TTL_SECONDS))) {
+            throw new SecurityBlockerException(
+                sprintf('Could not set ttl for redisKey: "%s"', $key),
+            );
+        }
+    }
+
+    /**
+     * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
      */
     protected function updateStorage(
         string $storageKey,

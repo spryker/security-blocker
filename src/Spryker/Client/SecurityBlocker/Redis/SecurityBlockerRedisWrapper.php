@@ -63,6 +63,23 @@ class SecurityBlockerRedisWrapper implements SecurityBlockerRedisWrapperInterfac
         );
     }
 
+    public function ttl(string $key): int
+    {
+        return $this->redisClient->ttl(
+            $this->securityBlockerConfig->getRedisConnectionKey(),
+            $this->getStorageKey($key),
+        );
+    }
+
+    public function expire(string $key, int $seconds): bool
+    {
+        return $this->redisClient->expire(
+            $this->securityBlockerConfig->getRedisConnectionKey(),
+            $this->getStorageKey($key),
+            $seconds,
+        );
+    }
+
     protected function setupConnection(): void
     {
         $this->redisClient->setupConnection(

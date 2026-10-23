@@ -14,6 +14,16 @@
         <property name="securityCheckAuthContext" type="SecurityCheckAuthContext"/>
     </transfer>
 
+    <transfer name="SecurityCheckAttemptContext" strict="true">
+        <property name="type" type="string"/>
+        <property name="identifier" type="string"/>
+        <property name="ttl" type="int"/>
+    </transfer>
+
+    <transfer name="SecurityCheckAttemptResponse" strict="true">
+        <property name="numberOfAttempts" type="int"/>
+    </transfer>
+
     <transfer name="SecurityBlockerConfigurationSettings">
         <property name="numberOfAttempts" type="int"/>
         <property name="ttl" type="int"/>
@@ -34,6 +44,7 @@
         <property name="password" type="string"/>
         <property name="database" type="int"/>
         <property name="isPersistent" type="bool"/>
+        <property name="username" type="string"/>
     </transfer>
 
 </transfers>

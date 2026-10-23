@@ -7,9 +7,12 @@
 
 namespace Spryker\Client\SecurityBlocker\Storage\KeyBuilder;
 
+use Generated\Shared\Transfer\SecurityCheckAttemptContextTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthContextTransfer;
 
 interface SecurityBlockerStorageKeyBuilderInterface
 {
     public function getStorageKey(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): string;
+
+    public function getAttemptStorageKey(SecurityCheckAttemptContextTransfer $securityCheckAttemptContextTransfer): string;
 }

@@ -7,6 +7,8 @@
 
 namespace Spryker\Client\SecurityBlocker;
 
+use Generated\Shared\Transfer\SecurityCheckAttemptContextTransfer;
+use Generated\Shared\Transfer\SecurityCheckAttemptResponseTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthContextTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer;
 
@@ -22,11 +24,7 @@ interface SecurityBlockerClientInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer
-     *
      * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
-     *
-     * @return \Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer
      */
     public function incrementLoginAttemptCount(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): SecurityCheckAuthResponseTransfer;
 
@@ -39,10 +37,23 @@ interface SecurityBlockerClientInterface
      * - Requires the `SecurityCheckAuthContextTransfer.type` to be provided.
      *
      * @api
-     *
-     * @param \Generated\Shared\Transfer\SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer
-     *
-     * @return \Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer
      */
     public function isAccountBlocked(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): SecurityCheckAuthResponseTransfer;
+
+    /**
+     * Specification:
+     * - Requires `SecurityCheckAttemptContextTransfer.type`, `SecurityCheckAttemptContextTransfer.identifier` and `SecurityCheckAttemptContextTransfer.ttl` to be set.
+     * - Increments by one the attempt counter of the `type` and `identifier` pair.
+     * - Returns the new value of the counter in `SecurityCheckAttemptResponseTransfer.numberOfAttempts`.
+     * - Does not decide if the attempt is blocked: the caller compares the returned value with its own limit.
+     * - Sets the time to live of the counter to `ttl` seconds when the counter has no time to live.
+     * - Does not change the time to live of a counter that already has one, so the counter is removed `ttl` seconds after the first attempt.
+     * - Raises a `ttl` below `60` seconds, also `0` and negative values, to `60` seconds, so the counter always expires.
+     * - Throws `SecurityBlockerException` when the counter cannot be incremented or its time to live cannot be set.
+     *
+     * @api
+     *
+     * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
+     */
+    public function incrementAttemptCount(SecurityCheckAttemptContextTransfer $securityCheckAttemptContextTransfer): SecurityCheckAttemptResponseTransfer;
 }

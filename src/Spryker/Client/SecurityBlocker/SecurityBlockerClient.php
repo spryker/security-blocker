@@ -7,6 +7,8 @@
 
 namespace Spryker\Client\SecurityBlocker;
 
+use Generated\Shared\Transfer\SecurityCheckAttemptContextTransfer;
+use Generated\Shared\Transfer\SecurityCheckAttemptResponseTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthContextTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer;
 use Spryker\Client\Kernel\AbstractClient;
@@ -48,5 +50,19 @@ class SecurityBlockerClient extends AbstractClient implements SecurityBlockerCli
         return $this->getFactory()
             ->createSecurityBlockerStorageChecker()
             ->isAccountBlocked($securityCheckAuthContextTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
+     */
+    public function incrementAttemptCount(SecurityCheckAttemptContextTransfer $securityCheckAttemptContextTransfer): SecurityCheckAttemptResponseTransfer
+    {
+        return $this->getFactory()
+            ->createSecurityBlockerStorageWriter()
+            ->incrementAttemptCount($securityCheckAttemptContextTransfer);
     }
 }

@@ -7,6 +7,7 @@
 
 namespace Spryker\Client\SecurityBlocker\Storage\KeyBuilder;
 
+use Generated\Shared\Transfer\SecurityCheckAttemptContextTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthContextTransfer;
 
 class SecurityBlockerStorageKeyBuilder implements SecurityBlockerStorageKeyBuilderInterface
@@ -23,5 +24,13 @@ class SecurityBlockerStorageKeyBuilder implements SecurityBlockerStorageKeyBuild
         . $securityCheckAuthContextTransfer->getIp()
         . static::KEY_PART_SEPARATOR
         . $securityCheckAuthContextTransfer->getAccount();
+    }
+
+    public function getAttemptStorageKey(SecurityCheckAttemptContextTransfer $securityCheckAttemptContextTransfer): string
+    {
+        return implode(static::KEY_PART_SEPARATOR, [
+            $securityCheckAttemptContextTransfer->getTypeOrFail(),
+            rawurlencode($securityCheckAttemptContextTransfer->getIdentifierOrFail()),
+        ]);
     }
 }

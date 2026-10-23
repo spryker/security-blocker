@@ -14,4 +14,8 @@ interface SecurityBlockerRedisWrapperInterface
     public function incr(string $key): int;
 
     public function setex(string $key, int $seconds, string $value): bool;
+
+    public function ttl(string $key): int;
+
+    public function expire(string $key, int $seconds): bool;
 }

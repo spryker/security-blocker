@@ -39,6 +39,16 @@ class SecurityBlockerToRedisClientBridge implements SecurityBlockerToRedisClient
         return $this->redisClient->setex($connectionKey, $key, $seconds, $value);
     }
 
+    public function ttl(string $connectionKey, string $key): int
+    {
+        return $this->redisClient->ttl($connectionKey, $key);
+    }
+
+    public function expire(string $connectionKey, string $key, int $seconds): bool
+    {
+        return $this->redisClient->expire($connectionKey, $key, $seconds);
+    }
+
     public function setupConnection(string $connectionKey, RedisConfigurationTransfer $configurationTransfer): void
     {
         $this->redisClient->setupConnection($connectionKey, $configurationTransfer);

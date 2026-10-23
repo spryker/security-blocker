@@ -24,6 +24,10 @@ use Spryker\Client\SecurityBlocker\Dependency\Client\SecurityBlockerToRedisClien
  */
 class InMemorySecurityBlockerRedisClient implements SecurityBlockerToRedisClientInterface
 {
+    protected const int TTL_KEY_NOT_EXISTS = -2;
+
+    protected const int TTL_NO_EXPIRATION = -1;
+
     /**
      * @var array<string, array{value: string, expiresAt: int|null}>
      */
@@ -57,6 +61,34 @@ class InMemorySecurityBlockerRedisClient implements SecurityBlockerToRedisClient
             'value' => $value,
             'expiresAt' => time() + $seconds,
         ];
+
+        return true;
+    }
+
+    public function ttl(string $connectionKey, string $key): int
+    {
+        $entry = $this->readEntry($connectionKey, $key);
+
+        if ($entry === null) {
+            return static::TTL_KEY_NOT_EXISTS;
+        }
+
+        if ($entry['expiresAt'] === null) {
+            return static::TTL_NO_EXPIRATION;
+        }
+
+        return $entry['expiresAt'] - time();
+    }
+
+    public function expire(string $connectionKey, string $key, int $seconds): bool
+    {
+        $entry = $this->readEntry($connectionKey, $key);
+
+        if ($entry === null) {
+            return false;
+        }
+
+        $this->entries[$this->buildEntryKey($connectionKey, $key)]['expiresAt'] = time() + $seconds;
 
         return true;
     }
