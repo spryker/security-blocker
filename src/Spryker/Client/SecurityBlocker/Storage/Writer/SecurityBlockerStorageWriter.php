@@ -13,6 +13,7 @@ use Generated\Shared\Transfer\SecurityCheckAttemptResponseTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthContextTransfer;
 use Generated\Shared\Transfer\SecurityCheckAuthResponseTransfer;
 use Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException;
+use Spryker\Client\SecurityBlocker\LoginAttempt\LoginAttemptCheckResultRequestStorageInterface;
 use Spryker\Client\SecurityBlocker\Redis\SecurityBlockerRedisWrapperInterface;
 use Spryker\Client\SecurityBlocker\Resolver\ConfigurationResolverInterface;
 use Spryker\Client\SecurityBlocker\Storage\KeyBuilder\SecurityBlockerStorageKeyBuilderInterface;
@@ -41,7 +42,8 @@ class SecurityBlockerStorageWriter implements SecurityBlockerStorageWriterInterf
     public function __construct(
         SecurityBlockerRedisWrapperInterface $securityBlockerRedisWrapper,
         SecurityBlockerStorageKeyBuilderInterface $securityBlockerStorageKeyBuilder,
-        ConfigurationResolverInterface $configurationResolver
+        ConfigurationResolverInterface $configurationResolver,
+        protected LoginAttemptCheckResultRequestStorageInterface $loginAttemptCheckResultRequestStorage
     ) {
         $this->securityBlockerRedisWrapper = $securityBlockerRedisWrapper;
         $this->securityBlockerStorageKeyBuilder = $securityBlockerStorageKeyBuilder;
@@ -53,6 +55,8 @@ class SecurityBlockerStorageWriter implements SecurityBlockerStorageWriterInterf
      */
     public function incrementLoginAttemptCount(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): SecurityCheckAuthResponseTransfer
     {
+        $this->loginAttemptCheckResultRequestStorage->removeCheckResults();
+
         $securityBlockerConfigurationSettingsTransfer = $this->configurationResolver
             ->getSecurityBlockerConfigurationSettingsForType($securityCheckAuthContextTransfer->getTypeOrFail());
         $key = $this->securityBlockerStorageKeyBuilder->getStorageKey($securityCheckAuthContextTransfer);

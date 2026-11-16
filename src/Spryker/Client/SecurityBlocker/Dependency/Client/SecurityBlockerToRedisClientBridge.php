@@ -29,6 +29,16 @@ class SecurityBlockerToRedisClientBridge implements SecurityBlockerToRedisClient
         return $this->redisClient->get($connectionKey, $key);
     }
 
+    /**
+     * @param array<string> $keys
+     *
+     * @return array<string|null>
+     */
+    public function mget(string $connectionKey, array $keys): array
+    {
+        return $this->redisClient->mget($connectionKey, $keys);
+    }
+
     public function incr(string $connectionKey, string $key): int
     {
         return $this->redisClient->incr($connectionKey, $key);
@@ -39,6 +49,25 @@ class SecurityBlockerToRedisClientBridge implements SecurityBlockerToRedisClient
         return $this->redisClient->setex($connectionKey, $key, $seconds, $value);
     }
 
+    public function set(
+        string $connectionKey,
+        string $key,
+        string $value,
+        ?string $expireResolution = null,
+        ?int $expireTTL = null,
+        ?string $flag = null
+    ): bool {
+        return $this->redisClient->set($connectionKey, $key, $value, $expireResolution, $expireTTL, $flag);
+    }
+
+    /**
+     * @param array<string> $keys
+     */
+    public function del(string $connectionKey, array $keys): int
+    {
+        return $this->redisClient->del($connectionKey, $keys);
+    }
+
     public function ttl(string $connectionKey, string $key): int
     {
         return $this->redisClient->ttl($connectionKey, $key);
@@ -47,6 +76,11 @@ class SecurityBlockerToRedisClientBridge implements SecurityBlockerToRedisClient
     public function expire(string $connectionKey, string $key, int $seconds): bool
     {
         return $this->redisClient->expire($connectionKey, $key, $seconds);
+    }
+
+    public function eval(string $connectionKey, string $script, int $numKeys, string ...$keysOrArgs): bool
+    {
+        return $this->redisClient->eval($connectionKey, $script, $numKeys, ...$keysOrArgs);
     }
 
     public function setupConnection(string $connectionKey, RedisConfigurationTransfer $configurationTransfer): void

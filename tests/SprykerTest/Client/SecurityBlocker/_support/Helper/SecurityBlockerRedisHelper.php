@@ -35,15 +35,42 @@ class SecurityBlockerRedisHelper extends Module
 {
     use DependencyHelperTrait;
 
+    protected const string CONFIG_KEY_BIND_BEFORE_EACH_TEST = 'bindBeforeEachTest';
+
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $config = [
+        self::CONFIG_KEY_BIND_BEFORE_EACH_TEST => true,
+    ];
+
     /**
      * A fresh client per test, so one test's attempt counters cannot block the next one.
+     * Suites whose tests bind their own Redis double (e.g. a mock) switch this off and call
+     * {@see haveInMemorySecurityBlockerRedisClient()} where they want the in-memory one.
      */
     public function _before(TestInterface $test): void // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
     {
+        if (!$this->config[static::CONFIG_KEY_BIND_BEFORE_EACH_TEST]) {
+            return;
+        }
+
+        $this->haveInMemorySecurityBlockerRedisClient();
+    }
+
+    /**
+     * Binds a fresh in-memory client and returns it, so a test can assert the stored counters and their expiry.
+     */
+    public function haveInMemorySecurityBlockerRedisClient(): InMemorySecurityBlockerRedisClient
+    {
+        $inMemorySecurityBlockerRedisClient = new InMemorySecurityBlockerRedisClient();
+
         $this->getDependencyHelper()->setDependency(
             SecurityBlockerDependencyProvider::CLIENT_REDIS,
-            new InMemorySecurityBlockerRedisClient(),
+            $inMemorySecurityBlockerRedisClient,
             SecurityBlockerFactory::class,
         );
+
+        return $inMemorySecurityBlockerRedisClient;
     }
 }

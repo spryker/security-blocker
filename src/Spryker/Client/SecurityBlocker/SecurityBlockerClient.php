@@ -59,6 +59,74 @@ class SecurityBlockerClient extends AbstractClient implements SecurityBlockerCli
      *
      * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
      */
+    public function checkLoginAttempt(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): SecurityCheckAuthResponseTransfer
+    {
+        return $this->getFactory()
+            ->createLoginAttemptChecker()
+            ->checkLoginAttempt($securityCheckAuthContextTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     */
+    public function isLoginChallengeRequired(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): bool
+    {
+        return $this->getFactory()
+            ->createLoginChallengeRequirementChecker()
+            ->isLoginChallengeRequired($securityCheckAuthContextTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
+     */
+    public function reserveLoginAttempt(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): SecurityCheckAuthResponseTransfer
+    {
+        return $this->getFactory()
+            ->createLoginAttemptReserver()
+            ->reserveLoginAttempt($securityCheckAuthContextTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
+     */
+    public function registerFailedLoginAttempt(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): SecurityCheckAuthResponseTransfer
+    {
+        return $this->getFactory()
+            ->createLoginAttemptRegistrar()
+            ->registerFailedLoginAttempt($securityCheckAuthContextTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
+     */
+    public function registerSuccessfulLoginAttempt(SecurityCheckAuthContextTransfer $securityCheckAuthContextTransfer): SecurityCheckAuthResponseTransfer
+    {
+        return $this->getFactory()
+            ->createLoginAttemptRegistrar()
+            ->registerSuccessfulLoginAttempt($securityCheckAuthContextTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @throws \Spryker\Client\SecurityBlocker\Exception\SecurityBlockerException
+     */
     public function incrementAttemptCount(SecurityCheckAttemptContextTransfer $securityCheckAttemptContextTransfer): SecurityCheckAttemptResponseTransfer
     {
         return $this->getFactory()

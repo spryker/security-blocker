@@ -5,6 +5,9 @@
         <property name="type" type="string"/>
         <property name="ip" type="string"/>
         <property name="account" type="string"/>
+        <property name="realm" type="string"/>
+        <property name="loginIdentifier" type="string"/>
+        <property name="ipCounterKeyStrategy" type="string" description="Last part of the per-IP counter key: `ip` (default) uses `account`, `ip-and-username` the hash of the normalized `loginIdentifier`."/>
     </transfer>
 
     <transfer name="SecurityCheckAuthResponse">
@@ -12,6 +15,7 @@
         <property name="numberOfAttempts" type="int"/>
         <property name="blockedFor" type="int"/>
         <property name="securityCheckAuthContext" type="SecurityCheckAuthContext"/>
+        <property name="isChallengeRequired" type="bool"/>
     </transfer>
 
     <transfer name="SecurityCheckAttemptContext" strict="true">
@@ -28,6 +32,21 @@
         <property name="numberOfAttempts" type="int"/>
         <property name="ttl" type="int"/>
         <property name="blockFor" type="int"/>
+    </transfer>
+
+    <transfer name="SecurityBlockerLoginRealmConfiguration" strict="true">
+        <property name="realm" type="string"/>
+        <property name="accountNumberOfAttempts" type="int"/>
+        <property name="accountTtl" type="int"/>
+        <property name="accountBlockFor" type="int"/>
+        <property name="accountChallengeNumberOfAttempts" type="int"/>
+        <property name="ipChallengeNumberOfAttempts" type="int"/>
+        <property name="globalChallengeNumberOfAttempts" type="int"/>
+        <property name="globalTtl" type="int"/>
+    </transfer>
+
+    <transfer name="AuditLoggerConfigCriteria" strict="true">
+        <property name="channelName" type="string"/>
     </transfer>
 
     <transfer name="RedisConfiguration">

@@ -1,5 +1,6 @@
 {
     "include": {
-        "spryker/transfer": "Transfer is required for new `getOrFail` functionality."
+        "spryker/transfer": "Transfer is required for new `getOrFail` functionality.",
+        "symfony/polyfill-intl-normalizer": "Provides the global Normalizer class for the login identifier normalization when the intl extension is not installed."
     }
 }

@@ -17,14 +17,10 @@ class ConfigurationResolver implements ConfigurationResolverInterface
      */
     protected array $securityBlockerConfigurationSettingsExpanderPlugins;
 
-    /**
-     * @var \Spryker\Client\SecurityBlocker\SecurityBlockerConfig
-     */
     protected SecurityBlockerConfig $securityBlockerConfig;
 
     /**
      * @param list<\Spryker\Client\SecurityBlockerExtension\Dependency\Plugin\SecurityBlockerConfigurationSettingsExpanderPluginInterface> $securityBlockerConfigurationSettingsExpanderPlugins
-     * @param \Spryker\Client\SecurityBlocker\SecurityBlockerConfig $securityBlockerConfig
      */
     public function __construct(
         array $securityBlockerConfigurationSettingsExpanderPlugins,

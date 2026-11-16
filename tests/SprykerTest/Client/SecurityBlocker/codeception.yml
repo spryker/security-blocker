@@ -22,3 +22,5 @@ suites:
                 - \SprykerTest\Shared\Testify\Helper\ConfigHelper
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
+                - \SprykerTest\Client\SecurityBlocker\Helper\SecurityBlockerRedisHelper:
+                      bindBeforeEachTest: false

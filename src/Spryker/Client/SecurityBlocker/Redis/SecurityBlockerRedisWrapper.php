@@ -17,6 +17,10 @@ class SecurityBlockerRedisWrapper implements SecurityBlockerRedisWrapperInterfac
      */
     protected const KV_PREFIX = 'kv:';
 
+    protected const string EXPIRE_RESOLUTION_SECONDS = 'EX';
+
+    protected const string FLAG_ONLY_IF_NOT_EXISTS = 'NX';
+
     /**
      * @var \Spryker\Client\SecurityBlocker\Dependency\Client\SecurityBlockerToRedisClientInterface
      */
@@ -45,6 +49,21 @@ class SecurityBlockerRedisWrapper implements SecurityBlockerRedisWrapperInterfac
         );
     }
 
+    /**
+     * @param list<string> $keys
+     *
+     * @return list<string|null>
+     */
+    public function mget(array $keys): array
+    {
+        $values = $this->redisClient->mget(
+            $this->securityBlockerConfig->getRedisConnectionKey(),
+            array_map(fn (string $key): string => $this->getStorageKey($key), $keys),
+        );
+
+        return array_values($values);
+    }
+
     public function incr(string $key): int
     {
         return $this->redisClient->incr(
@@ -63,6 +82,26 @@ class SecurityBlockerRedisWrapper implements SecurityBlockerRedisWrapperInterfac
         );
     }
 
+    public function setIfNotExists(string $key, string $value, int $seconds): bool
+    {
+        return $this->redisClient->set(
+            $this->securityBlockerConfig->getRedisConnectionKey(),
+            $this->getStorageKey($key),
+            $value,
+            static::EXPIRE_RESOLUTION_SECONDS,
+            $seconds,
+            static::FLAG_ONLY_IF_NOT_EXISTS,
+        );
+    }
+
+    public function del(string $key): int
+    {
+        return $this->redisClient->del(
+            $this->securityBlockerConfig->getRedisConnectionKey(),
+            [$this->getStorageKey($key)],
+        );
+    }
+
     public function ttl(string $key): int
     {
         return $this->redisClient->ttl(
@@ -77,6 +116,21 @@ class SecurityBlockerRedisWrapper implements SecurityBlockerRedisWrapperInterfac
             $this->securityBlockerConfig->getRedisConnectionKey(),
             $this->getStorageKey($key),
             $seconds,
+        );
+    }
+
+    /**
+     * @param list<string> $keys
+     * @param list<string> $arguments
+     */
+    public function eval(string $script, array $keys, array $arguments): bool
+    {
+        return $this->redisClient->eval(
+            $this->securityBlockerConfig->getRedisConnectionKey(),
+            $script,
+            count($keys),
+            ...array_map(fn (string $key): string => $this->getStorageKey($key), $keys),
+            ...$arguments,
         );
     }
 

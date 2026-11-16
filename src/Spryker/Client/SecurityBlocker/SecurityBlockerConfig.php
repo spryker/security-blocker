@@ -10,11 +10,32 @@ namespace Spryker\Client\SecurityBlocker;
 use Generated\Shared\Transfer\RedisConfigurationTransfer;
 use Generated\Shared\Transfer\RedisCredentialsTransfer;
 use Generated\Shared\Transfer\SecurityBlockerConfigurationSettingsTransfer;
+use Generated\Shared\Transfer\SecurityBlockerLoginRealmConfigurationTransfer;
 use Spryker\Client\Kernel\AbstractBundleConfig;
 use Spryker\Shared\SecurityBlocker\SecurityBlockerConstants;
 
 class SecurityBlockerConfig extends AbstractBundleConfig
 {
+    /**
+     * Specification:
+     * - Value of `SecurityCheckAuthContextTransfer.ipCounterKeyStrategy`, also used when the property is empty.
+     * - The per-IP counter key is `{type}:{ip}:{account}`, with the `account` of the caller.
+     *
+     * @api
+     */
+    public const string IP_COUNTER_KEY_STRATEGY_IP = 'ip';
+
+    /**
+     * Specification:
+     * - Value of `SecurityCheckAuthContextTransfer.ipCounterKeyStrategy`.
+     * - The per-IP counter key ends with the SHA-256 hash of the normalized `loginIdentifier` (trimmed, case-folded,
+     *   accents stripped) instead of `account`, so an IP address has one counter per login identifier and case variants
+     *   share it. Uses `account` when `loginIdentifier` is empty.
+     *
+     * @api
+     */
+    public const string IP_COUNTER_KEY_STRATEGY_IP_AND_USERNAME = 'ip-and-username';
+
     /**
      * @deprecated Use {@link \Spryker\Client\SecurityBlockerStorefrontAgent\SecurityBlockerStorefrontAgentConfig::SECURITY_BLOCKER_AGENT_ENTITY_TYPE} instead.
      *
@@ -42,13 +63,31 @@ class SecurityBlockerConfig extends AbstractBundleConfig
      */
     protected const DEFAULT_BLOCKING_NUMBER_OF_ATTEMPTS = 10;
 
+    protected const int DEFAULT_ACCOUNT_BLOCKING_NUMBER_OF_ATTEMPTS = 9;
+
+    protected const int DEFAULT_ACCOUNT_BLOCKING_TTL = 900;
+
+    protected const int DEFAULT_ACCOUNT_BLOCK_FOR_SECONDS = 360;
+
+    protected const int DEFAULT_ACCOUNT_CHALLENGE_NUMBER_OF_ATTEMPTS = 3;
+
+    protected const int DEFAULT_IP_CHALLENGE_NUMBER_OF_ATTEMPTS = 5;
+
+    protected const int DEFAULT_GLOBAL_CHALLENGE_NUMBER_OF_ATTEMPTS = 100;
+
+    protected const int DEFAULT_GLOBAL_CHALLENGE_TTL = 300;
+
+    protected const int LOGIN_IDENTIFIER_MAX_LENGTH = 1024;
+
+    protected const string LOGIN_IDENTIFIER_SHARP_S_EQUIVALENT = 's';
+
+    protected const bool IS_SECURITY_AUDIT_LOG_ENABLED = false;
+
     /**
      * Specification:
      * - Returns redis connection key used by the module.
      *
      * @api
-     *
-     * @return string
      */
     public function getRedisConnectionKey(): string
     {
@@ -60,8 +99,6 @@ class SecurityBlockerConfig extends AbstractBundleConfig
      * - Returns redis connection configuration used by the module.
      *
      * @api
-     *
-     * @return \Generated\Shared\Transfer\RedisConfigurationTransfer
      */
     public function getRedisConnectionConfiguration(): RedisConfigurationTransfer
     {
@@ -134,8 +171,6 @@ class SecurityBlockerConfig extends AbstractBundleConfig
      * - Used as fallback for all the entity types if the type-specific configuration is not given.
      *
      * @api
-     *
-     * @return \Generated\Shared\Transfer\SecurityBlockerConfigurationSettingsTransfer
      */
     public function getDefaultSecurityBlockerConfigurationSettings(): SecurityBlockerConfigurationSettingsTransfer
     {
@@ -148,9 +183,61 @@ class SecurityBlockerConfig extends AbstractBundleConfig
     }
 
     /**
-     * @deprecated Use $this->get(SecurityBlockerConstants::SECURITY_BLOCKER_REDIS_SCHEME) instead. Added for BC reason only.
+     * Specification:
+     * - Returns the login protection settings of a realm that no login realm configuration expander plugin configures.
+     * - The realm property is not set; it is the realm the settings are resolved for.
      *
-     * @return string
+     * @api
+     */
+    public function getDefaultLoginRealmConfiguration(): SecurityBlockerLoginRealmConfigurationTransfer
+    {
+        return (new SecurityBlockerLoginRealmConfigurationTransfer())
+            ->setAccountNumberOfAttempts(static::DEFAULT_ACCOUNT_BLOCKING_NUMBER_OF_ATTEMPTS)
+            ->setAccountTtl(static::DEFAULT_ACCOUNT_BLOCKING_TTL)
+            ->setAccountBlockFor(static::DEFAULT_ACCOUNT_BLOCK_FOR_SECONDS)
+            ->setAccountChallengeNumberOfAttempts(static::DEFAULT_ACCOUNT_CHALLENGE_NUMBER_OF_ATTEMPTS)
+            ->setIpChallengeNumberOfAttempts(static::DEFAULT_IP_CHALLENGE_NUMBER_OF_ATTEMPTS)
+            ->setGlobalChallengeNumberOfAttempts(static::DEFAULT_GLOBAL_CHALLENGE_NUMBER_OF_ATTEMPTS)
+            ->setGlobalTtl(static::DEFAULT_GLOBAL_CHALLENGE_TTL);
+    }
+
+    /**
+     * Specification:
+     * - Returns the maximum number of characters of a login identifier that are taken into account when counting login attempts per account.
+     *
+     * @api
+     */
+    public function getLoginIdentifierMaxLength(): int
+    {
+        return static::LOGIN_IDENTIFIER_MAX_LENGTH;
+    }
+
+    /**
+     * Specification:
+     * - Returns the characters a sharp s (`ß`) of a login identifier is replaced with when counting login attempts per account.
+     * - Must match how the database compares `ß`: `s` for `utf8mb3_general_ci` (the default), `ss` for `utf8_unicode_ci`.
+     *
+     * @api
+     */
+    public function getLoginIdentifierSharpSEquivalent(): string
+    {
+        return static::LOGIN_IDENTIFIER_SHARP_S_EQUIVALENT;
+    }
+
+    /**
+     * Specification:
+     * - Returns `true` when account locks and realm-wide CAPTCHA activations are written to the `security` audit log channel.
+     * - Disabled by default.
+     *
+     * @api
+     */
+    public function isSecurityAuditLogEnabled(): bool
+    {
+        return static::IS_SECURITY_AUDIT_LOG_ENABLED;
+    }
+
+    /**
+     * @deprecated Use $this->get(SecurityBlockerConstants::SECURITY_BLOCKER_REDIS_SCHEME) instead. Added for BC reason only.
      */
     protected function getZedSessionScheme(): string
     {
